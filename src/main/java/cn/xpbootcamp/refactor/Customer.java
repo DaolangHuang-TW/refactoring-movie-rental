@@ -1,19 +1,18 @@
 package cn.xpbootcamp.refactor;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Vector;
 
 public class Customer {
-
     private String name;
-    private Vector<Rental> rentals = new Vector<>();
+    private ArrayList<Rental> rentals = new ArrayList<>();
 
     Customer(String name) {
         this.name = name;
     }
 
     void addRental(Rental rental) {
-        rentals.addElement(rental);
+        rentals.add(rental);
     }
 
     public String getName() {
@@ -22,28 +21,25 @@ public class Customer {
 
     String statement() {
         double totalAmount = 0d;
-        int frequentRenterPoints = 0;
-        Enumeration<Rental> rentals = this.rentals.elements();
+        // frequent renter points
+        int totalPoints = 0;
         StringBuilder result = new StringBuilder("Rental Record for " + getName() + "：\n");
-        while (rentals.hasMoreElements()) {
-            Rental each = rentals.nextElement();
-            double thisAmount = each.amount();
-            //add frequent renter points
-            frequentRenterPoints++;
-            if ((each.getMovie().getPriceCode() == Movie.NEW_RELEASE) && each.getDaysRented() > 1)
-                frequentRenterPoints++;
+
+        for (Rental rental : rentals) {
+            double amount = rental.amount();
+            totalPoints += rental.points();
 
             //show figures for this rental
             result.append("\t")
-                  .append(each.getMovie().getTitle())
-                  .append("\t")
-                  .append(thisAmount).append("\n");
-            totalAmount += thisAmount;
+                    .append(rental.getMovie().getTitle())
+                    .append("\t")
+                    .append(amount).append("\n");
+            totalAmount += amount;
         }
+
         //add footer lines
         result.append("Amount owed is ").append(totalAmount).append("\n");
-        result.append("You earned ").append(frequentRenterPoints).append(" frequent renter points");
+        result.append("You earned ").append(totalPoints).append(" frequent renter points");
         return result.toString();
     }
-
 }

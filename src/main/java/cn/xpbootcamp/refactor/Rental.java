@@ -38,4 +38,18 @@ public class Rental {
 
         return amount;
     }
+    /*frequent renter points*/
+    int points() {
+        int points = 1;
+        switch (movie.getPriceCode()) {
+            case Movie.NEW_RELEASE:
+                if (daysRented > 1) {
+                    points++;
+                }
+                break;
+            default:
+                break;
+        }
+        return points;
+    }
 }
